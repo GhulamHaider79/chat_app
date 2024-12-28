@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/hashPassword.js";
+import cloudinary from '../lib/storage.js'
 
 export const signup = async (req, res) => {
     const { fullName, email, password } = req.body;
@@ -105,11 +106,11 @@ export const updateProfile = async (req, res) => {
         };
 
         const uploadResponse = await cloudinary.uploader.upload(profilePic);
-        const updateUser = await User.findByIdAndUpdate(userId, { profilePic:uploadResponse.secure_url }, { new:tru });
+        const updateUser = await User.findByIdAndUpdate(userId, { profilePic:uploadResponse.secure_url }, { new:true });
         res.status(200).json(updateUser)
         
     } catch (error) {
-        console.log("error", error.message);
+        console.log("error is here", error.message);
         res.status(500).json({message: "internal server error"});
     }
 };
