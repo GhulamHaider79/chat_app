@@ -1,5 +1,7 @@
 import User from '../models/user.model.js';
 import Message from '../models/message.model.js';
+import cloudinary from '../lib/storage.js'
+import { getReceiverSocketId, io } from '../lib/socket.js';
 
 export const getUsers = async (req, res) => {
  try {
@@ -40,22 +42,27 @@ try {
 
     let imageUrl;
    if(image){
-    const uploadResponse = await cloudinary.upload(image);
+    const uploadResponse = await cloudinary.uploader.upload(image);
     imageUrl = uploadResponse.secure_url
    };
 
-   const NewMessage = new Message ({
+   const newMessage = new Message ({
     senderId,
     receiverId,
     text,
     image: imageUrl
    });
 
-   await NewMessage.save();
+   await newMessage.save();
 
-   // todo : realtime functionality goes here => socket.io
+   //here will add 
 
-   res.status(201).json(NewMessage);
+   const receiverSocketId = getReceiverSocketId(receiverId);
+   if (receiverSocketId) {
+     io.to(receiverSocketId).emit("newMessage", newMessage);
+   }
+
+   res.status(201).json(newMessage);
     
 } catch (error) {
     console.error("error in get message", error.message);

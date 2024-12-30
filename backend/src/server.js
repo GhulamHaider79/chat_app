@@ -5,12 +5,13 @@ import messageRoute from "./routes/message.Router.js";
 import connectDB from "./lib/db.js";
 import cookieParser from "cookie-parser";
 import cors from 'cors'
+import { app, server  } from "./lib/socket.js";
 
 
 env.config();
 
 
-const app = express();
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -25,10 +26,10 @@ app.use(cors(
 
 app.use('/api/auth', authRoute);
 
-app.use('/api/message', messageRoute);
+app.use('/api/messages', messageRoute);
 
 
-app.listen( PORT || 3000, () => {
+server.listen( PORT || 3000, () => {
     console.log(`Server is running on port http://localhost:${PORT}`);
     connectDB();
 });
