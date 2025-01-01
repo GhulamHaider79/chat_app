@@ -5,12 +5,14 @@
   "main": "service.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
   },
   "author": "Ghulam haider",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "chatapp_realtime": "file:..",
     "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
